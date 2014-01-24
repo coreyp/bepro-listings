@@ -421,7 +421,7 @@
 	function bepro_listings_item_after_gallery_template(){
 		$page_id = get_the_ID();
 		//show categories
-		$cat_section = "<h3>Categories : </h3><div class='bepro_listing_category_section'>".get_the_term_list($page_id, 'bepro_listing_types', '', ', ','')."</div>";
+		$cat_section = "<h3>Categories: </h3><div class='bepro_listing_category_section'>".get_the_term_list($page_id, 'bepro_listing_types', '', ', ','')."</div>";
 
 		echo $cat_section;
 	}
@@ -439,7 +439,7 @@
 		}
 		
 		if(!empty($data["show_details"]) && (($data["show_details"] == "on")|| ($data["show_details"] == "on")) ){
-			echo "<h3>Details : </h3><span class='bepro_listing_info'>";
+			echo "<h3>Details: </h3><span class='bepro_listing_info'>";
 			if($data["show_cost"] == "on"){
 				echo "<div class='item_cost'>".__("Cost", "bepro-listings")." - ".$cost."</div>";
 			}	
