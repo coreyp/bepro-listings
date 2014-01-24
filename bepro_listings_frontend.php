@@ -346,7 +346,7 @@
 	}
 	function bepro_listings_list_content_template($bp_listing){
 		$content =  substr($bp_listing->post_content, 0, 130);
-		echo '<span class="result_desc">'.do_shortcode($content).'</span>';
+		echo '<span class="result_desc">'.stripslashes(do_shortcode($content)).'</span>';
 	}
 	function bepro_listings_list_links_template($bp_listing){
 		$data = get_option("bepro_listings");
@@ -421,8 +421,7 @@
 	function bepro_listings_item_after_gallery_template(){
 		$page_id = get_the_ID();
 		//show categories
-		// CP remove space before colon :
-		$cat_section = "<h3>Categories: </h3><div class='bepro_listing_category_section'>".get_the_term_list($page_id, 'bepro_listing_types', '', ', ','')."</div>";
+		$cat_section = "<h3>Categories : </h3><div class='bepro_listing_category_section'>".get_the_term_list($page_id, 'bepro_listing_types', '', ', ','')."</div>";
 
 		echo $cat_section;
 	}
@@ -440,7 +439,7 @@
 		}
 		
 		if(!empty($data["show_details"]) && (($data["show_details"] == "on")|| ($data["show_details"] == "on")) ){
-			echo "<h3>Details: </h3><span class='bepro_listing_info'>";
+			echo "<h3>Details : </h3><span class='bepro_listing_info'>";
 			if($data["show_cost"] == "on"){
 				echo "<div class='item_cost'>".__("Cost", "bepro-listings")." - ".$cost."</div>";
 			}	
@@ -465,7 +464,7 @@
 	function bepro_listings_item_content_template(){
 		$data = get_option("bepro_listings");
 		if(!empty($data["show_content"]) && (($data["show_content"] == "on")|| ($data["show_content"] == 1)) ){
-			echo "<div class='bepro_listing_desc'>".apply_filters("bepro_listings_item_content",bepro_listings_item_tabs())."</div>";
+			echo "<div class='bepro_listing_desc'>".stripslashes(apply_filters("bepro_listings_item_content",bepro_listings_item_tabs()))."</div>";
 		}	
 	}
 	

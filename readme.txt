@@ -4,7 +4,7 @@ Donate link: http://beprosoftware.com/
 Tags: address, apartment, audio, buddypress, business, business directory, catalogue, classifieds, clients, directory, document, employee, finder, front end upload, gallery, google, image, listings, location, locator, map, media, members, music, mp3, mp4, pets, player, pdf, portfolio, product, property, real estate, rent, showcase, staff, store, theme, vehicle, video, vimeo, youtube
 Requires at least: 3.0.1
 Tested up to: 3.8
-Stable tag: 2.0.91
+Stable tag: 2.0.92
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -146,6 +146,10 @@ The latest X listings added to the system
 
 Not currently. Do you think that would be a good feature?
 
+= Issues Generating Lat/Lng coordinates?  =
+
+Try changing the query type under map in the admin
+
 = Is there support? =
 
 Yes, our development team created the plugin and continue to offer free support via our support forums and paid support via our website beprosoftware.com
@@ -237,6 +241,13 @@ Yes, there are lots of hooks/filters and templates (listings/page)
 = 2.0.86 (Wednesday, Jan 15th 2013) = * Update listings content fix
 
 = 2.0.90 (Friday, Jan 17th 2013) = * Substantial upgrade making shortcodes work better with custom templates
+
+= 2.0.92 (Thursday, Jan 23rd 2013) = 
+
+* Removing slashes (e.g. won\'t) from listing and item content
+
+* New admin feature to toggle how lat/lng is retrieved
+
 
 == Upgrade Notice ==
 

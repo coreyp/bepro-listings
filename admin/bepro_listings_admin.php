@@ -403,6 +403,9 @@
 			$data["show_details"] = $_POST["show_details"];
 			$data["show_content"] = $_POST["show_content"];
 			
+			//map
+			$data["map_query_type"] = $_POST["map_query_type"];
+			
 			//buddypress
 			$data["buddypress"] = $_POST["buddypress"];
 			
@@ -424,8 +427,9 @@
 						<li><a href="#tabs-2">Forms</a></li>
 						<li><a href="#tabs-3">Search/Listings</a></li>
 						<li><a href="#tabs-4">Page/Post</a></li>
-						<li><a href="#tabs-5">Buddypress</a></li>
-						<li><a href="#tabs-6">Support</a></li>
+						<li><a href="#tabs-5">Map</a></li>
+						<li><a href="#tabs-6">Buddypress</a></li>
+						<li><a href="#tabs-7">Support</a></li>
 					</ul>
 				
 					<div id="tabs-1">
@@ -491,9 +495,15 @@
 						<span class="form_label"><?php _e("Show Content", "bepro-listings"); ?></span><input type="checkbox" name="show_content" <?php echo ($data["show_content"]== (1 || "on"))? 'checked="checked"':"" ?>>
 					</div>
 					<div id="tabs-5">
-						<span class="form_label"><?php _e("Buddypress", "bepro-listings"); ?></span><input type="checkbox" name="buddypress" <?php echo ($data["buddypress"]== (1 || "on"))? 'checked="checked"':"" ?>>
+						<span class="form_label"><?php _e("Query Type", "bepro-listings"); ?></span><select name="map_query_type">
+							<option value="curl" <?php echo ($data["map_query_type"] == "curl")? 'selected="selected"':""; ?>>Curl</option>
+							<option value="file_get_contents" <?php echo ($data["map_query_type"] == "file_get_contents")? 'selected="selected"':""; ?>>file_get_contents</option>
+						</select>	
 					</div>
 					<div id="tabs-6">
+						<span class="form_label"><?php _e("Buddypress", "bepro-listings"); ?></span><input type="checkbox" name="buddypress" <?php echo ($data["buddypress"]== (1 || "on"))? 'checked="checked"':"" ?>>
+					</div>
+					<div id="tabs-7">
 						<a href="http://beprosoftware.com"><img src="<?php echo BEPRO_LISTINGS_PLUGIN_PATH."/images/bepro_software_logo.png"; ?>"></a><br />
 						<p><b>THANK YOU</b> for your interest and support in this plugin. Our BePro Software Team is dedicated to providing you with the tools needed for great websites. You can get involved in any of the following ways:</p>
 						<iframe width="560" height="315" src="//www.youtube.com/embed/IfhJmP_LRDs" frameborder="0" allowfullscreen></iframe>

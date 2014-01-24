@@ -210,6 +210,8 @@
 			$data["gallery_cols"] = 3;
 			$data["show_details"] = "on";
 			$data["show_content"] = "on";
+			//map
+			$data["map_query_type"] = "curl";
 			//buddypress
 			$data["buddypress"] = 0;
 			//Support
@@ -318,7 +320,7 @@
 		
 		// Current version
 		if ( !defined( 'BEPRO_LISTINGS_VERSION' ) ){
-			define( 'BEPRO_LISTINGS_VERSION', '2.0.91' );
+			define( 'BEPRO_LISTINGS_VERSION', '2.0.92' );
 		}	
 		
 		$data = get_option("bepro_listings");
@@ -403,6 +405,7 @@
 			$default_user_id = $data["default_user_id"];
 			$success_message = $data["success_message"];
 			$num_images = $data["num_images"];
+			$query_type = $data["map_query_type"];
 			$return_message = false;
 			
 			$item_name = $wpdb->escape($_POST["item_name"]);
@@ -488,27 +491,9 @@
 						$lat = $_POST['lat'];
 						$lon = $_POST['lon'];
 					}else{
-						if(!empty($_POST['postcode']) || !empty($_POST['country'])){  
-							$to_addr .= !empty($_POST['address_line1'])? $_POST['address_line1']:"";
-							$to_addr .= !empty($_POST['city'])? ", ".$_POST['city']:"";
-							$to_addr .= !empty($_POST['state'])? ", ".$_POST['state']:"";
-							$to_addr .= !empty($_POST['country'])? ", ".$_POST['country']:"";
-							$to_addr .= !empty($_POST['postcode'])? ", ".$_POST['postcode']:"";
-							$addresstofind_1 = "http://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($to_addr)."&sensor=false";
-							$ch = curl_init();
-							curl_setopt($ch, CURLOPT_URL, $addresstofind_1);
-							curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.001 (windows; U; NT4.0; en-US; rv:1.0) Gecko/25250101');
-							curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,1);
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-							$addr_search_1  =  curl_exec($ch);
-							curl_close($ch);
-							
-							if($addr_search_1)$addr_search_1 = json_decode($addr_search_1);
-							if($addr_search_1->results[0]->geometry->location){
-								$lon = (string)$addr_search_1->results[0]->geometry->location->lng;
-								$lat = (string)$addr_search_1->results[0]->geometry->location->lat;
-							}
-						}
+						$latlon = get_bepro_lat_lon();
+						$lat = $latlon["lat"];
+						$lon = $latlon["lon"];
 					}
 					
 					$post_data = $_POST;
@@ -535,6 +520,42 @@
 		}
 		
 		return $return_message;
+	}
+	
+	function get_bepro_lat_lon(){
+		$latlon = array();
+		$query_type = $data["map_query_type"];
+		if(!empty($_POST['postcode']) || !empty($_POST['country'])){  
+			$to_addr .= !empty($_POST['address_line1'])? $_POST['address_line1']:"";
+			$to_addr .= !empty($_POST['city'])? ", ".$_POST['city']:"";
+			$to_addr .= !empty($_POST['state'])? ", ".$_POST['state']:"";
+			$to_addr .= !empty($_POST['country'])? ", ".$_POST['country']:"";
+			$to_addr .= !empty($_POST['postcode'])? ", ".$_POST['postcode']:"";
+			$addresstofind_1 = "http://maps.googleapis.com/maps/api/geocode/json?address=".urlencode($to_addr)."&sensor=false";
+			if(empty($query_type) || ($query_type == "curl")){
+				$ch = curl_init(); 
+				curl_setopt($ch, CURLOPT_URL, $addresstofind_1);
+				curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.001 (windows; U; NT4.0; en-US; rv:1.0) Gecko/25250101');
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,1);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+				$addr_search_1  =  curl_exec($ch);
+				curl_close($ch);
+			}else{
+				$addr_search_1  =  file_get_contents($addresstofind_1);
+				/*
+				preg_match('!center:\s*{lat:\s*(-?\d+\.\d+),lng:\s*(-?\d+\.\d+)}!U', $_result, $rawlatlon);
+				$lat = $rawlatlon[1];
+				$lon =  $rawlatlon[2];
+				*/
+			}
+			
+			if($addr_search_1)$addr_search_1 = json_decode($addr_search_1);
+			if($addr_search_1->results[0]->geometry->location){
+				$latlon["lon"] = (string)$addr_search_1->results[0]->geometry->location->lng;
+				$latlon["lat"] = (string)$addr_search_1->results[0]->geometry->location->lat;
+			}
+		}
+		return $latlon;
 	}
 	
 	function bepro_add_post($post){
